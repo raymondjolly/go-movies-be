@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
+	"go-movies-be/models"
 	"log"
 	"net/http"
 	"os"
@@ -32,6 +33,7 @@ type config struct {
 type application struct {
 	config config
 	logger *log.Logger
+	Models models.Models
 }
 
 func main() {
@@ -53,6 +55,7 @@ func main() {
 	app := &application{
 		config: cfg,
 		logger: logger,
+		Models: models.NewModels(db),
 	}
 
 	srv := http.Server{

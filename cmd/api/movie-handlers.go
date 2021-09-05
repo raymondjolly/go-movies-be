@@ -3,10 +3,8 @@ package main
 import (
 	"errors"
 	"github.com/julienschmidt/httprouter"
-	"go-movies-be/models"
 	"net/http"
 	"strconv"
-	"time"
 )
 
 func (app *application) getOneMovie(w http.ResponseWriter, r *http.Request) {
@@ -18,21 +16,12 @@ func (app *application) getOneMovie(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	movie := models.Movie{
-		Id:         id,
-		Title:      "Dumb and Dumber",
-		Year:       1994,
-		MPAARating: "PG-13",
-		RunTime:    153,
-		CreatedAt:  time.Now(),
-		UpdatedAt:  time.Now(),
-	}
+	movie, err := app.Models.DB.Get(id)
 
 	err = app.writeJSON(w, http.StatusOK, movie, "movie")
 	if err != nil {
 		app.logger.Println(err)
 	}
-
 }
 
 func (app *application) getMovies(w http.ResponseWriter, r *http.Request) {

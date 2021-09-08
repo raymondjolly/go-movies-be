@@ -33,13 +33,25 @@ func (app *application) getAllMovies(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//TODO write a handler for all genres
-func(app *application) getAllGenres(w http.ResponseWriter, r *http.Request){
-	genres, err:=app.Models.DB.GenresAll()
-	if err!=nil{
+func (app *application) getAllGenres(w http.ResponseWriter, r *http.Request) {
+	genres, err := app.Models.DB.GenresAll()
+	if err != nil {
 		app.errorJSON(w, err)
 	}
-	err= app.writeJSON(w, http.StatusOK, genres, "genres")
+	err = app.writeJSON(w, http.StatusOK, genres, "genres")
+}
+
+func (app *application) getMoviesByGenre(w http.ResponseWriter, r *http.Request) {
+	params := httprouter.ParamsFromContext(r.Context())
+	genreId, err := strconv.Atoi(params.ByName("genre_id"))
+	if err != nil {
+		app.errorJSON(w, err)
+	}
+	movies, err := app.Models.DB.All(genreId)
+	if err != nil {
+		app.errorJSON(w, err)
+	}
+	err = app.writeJSON(w, http.StatusOK, movies, "movies")
 }
 
 //TODO write a handler for a deleteMovie function
@@ -49,5 +61,3 @@ func(app *application) getAllGenres(w http.ResponseWriter, r *http.Request){
 //TODO write a handler for a createMovie function
 
 //TODO write a handler for a searchMovie function
-
-

@@ -36,7 +36,7 @@ type Movie struct {
 
 //Genre is the type for genre
 type Genre struct {
-	Id        int       `json:"-"`
+	Id        int       `json:"id"`
 	GenreName string    `json:"genre_name"`
 	CreatedAt time.Time `json:"-"`
 	UpdatedAt time.Time `json:"-"`

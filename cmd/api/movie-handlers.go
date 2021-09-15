@@ -58,6 +58,20 @@ func (app *application) getMoviesByGenre(w http.ResponseWriter, r *http.Request)
 
 //TODO write a handler for an insertMovie function
 
-//TODO write a handler for a createMovie function
+//TODO write a handler for a editMovie function
+func (app *application) editMovie(w http.ResponseWriter, r *http.Request) {
+	type jsonResp struct {
+		OK bool `json:"ok"`
+	}
+
+	ok := jsonResp{
+		OK: true,
+	}
+
+	err := app.writeJSON(w, http.StatusOK, ok, "response")
+	if err != nil {
+		app.errorJSON(w, err)
+	}
+}
 
 //TODO write a handler for a searchMovie function

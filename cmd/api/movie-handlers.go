@@ -97,10 +97,12 @@ func (app *application) editMovie(w http.ResponseWriter, r *http.Request) {
 	movie.CreatedAt = time.Now()
 	movie.UpdatedAt = time.Now()
 
-	err = app.Models.DB.InsertMovie(movie)
-	if err != nil {
-		app.errorJSON(w, err)
-		return
+	if movie.Id == 0 {
+		err = app.Models.DB.InsertMovie(movie)
+		if err != nil {
+			app.errorJSON(w, err)
+			return
+		}
 	}
 
 	ok := jsonResp{

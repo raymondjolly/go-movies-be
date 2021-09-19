@@ -87,14 +87,6 @@ func (app *application) getAllMoviesByGenre(w http.ResponseWriter, r *http.Reque
 	}
 }
 
-func (app *application) deleteMovie(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func (app *application) insertMovie(w http.ResponseWriter, r *http.Request) {
-
-}
-
 type MoviePayload struct {
 	ID          string `json:"id"`
 	Title       string `json:"title"`
@@ -161,6 +153,23 @@ func (app *application) editmovie(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//TODO write a handler for a deleteMovie function
+func (app *application) deleteMovie(w http.ResponseWriter, r *http.Request) {
+	params := httprouter.ParamsFromContext(r.Context())
+	id, err := strconv.Atoi(params.ByName("id"))
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	err = app.Models.DB.DeleteMovie(id)
+	if err != nil {
+		app.errorJSON(w, err)
+	}
+	ok := jsonResp{OK: true}
+	err = app.writeJSON(w, http.StatusOK, ok, "response")
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+}
 
 //TODO write a handler for a searchMovie function

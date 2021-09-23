@@ -47,6 +47,6 @@ func (app *application) SignIn(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		app.errorJSON(w, errors.New("error signing"))
 	}
-	app.writeJSON(w, http.StatusOK, jwtBytes, "response")
+	app.writeJSON(w, http.StatusOK, string(jwtBytes), "response")
 
 }

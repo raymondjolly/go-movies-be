@@ -30,7 +30,7 @@ func (app *application) checkToken(next http.Handler) http.Handler {
 		headerParts := strings.Split(authHeader, " ")
 
 		if len(headerParts) != 2 {
-			app.errorJSON(w, errors.New("invalid user"))
+			app.errorJSON(w, errors.New("invalid auth user"))
 			return
 		}
 		if headerParts[0] != "Bearer" {
@@ -41,28 +41,28 @@ func (app *application) checkToken(next http.Handler) http.Handler {
 		token := headerParts[1]
 		claims, err := jwt.HMACCheck([]byte(token), []byte(app.config.jwt.secret))
 		if err != nil {
-			app.errorJSON(w, errors.New("unauthorized - failed HMAC Check"))
+			app.errorJSON(w, errors.New("unauthorized - failed HMAC Check"), http.StatusForbidden)
 			return
 		}
 
 		if !claims.Valid(time.Now()) {
-			app.errorJSON(w, errors.New("unauthorized - token expired"))
+			app.errorJSON(w, errors.New("unauthorized - token expired"), http.StatusForbidden)
 			return
 		}
 
 		if !claims.AcceptAudience("mydomain.com") {
-			app.errorJSON(w, errors.New("unauthorized - invalid audience"))
+			app.errorJSON(w, errors.New("unauthorized - invalid audience"), http.StatusForbidden)
 			return
 		}
 
 		if claims.Issuer != "mydomain.com" {
-			app.errorJSON(w, errors.New("unauthorized - invalid issuer"))
+			app.errorJSON(w, errors.New("unauthorized - invalid issuer"), http.StatusForbidden)
 			return
 		}
 
 		userId, err := strconv.ParseInt(claims.Subject, 10, 64)
 		if err != nil {
-			app.errorJSON(w, errors.New("unauthorized"))
+			app.errorJSON(w, errors.New("unauthorized"), http.StatusForbidden)
 		}
 
 		log.Println("Valid user", userId)

@@ -27,6 +27,7 @@ func (app *application) SignIn(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&creds)
 	if err != nil {
 		app.errorJSON(w, errors.New("unauthorized"))
+		return
 	}
 
 	hashedPassword := validUser.Password
@@ -46,6 +47,7 @@ func (app *application) SignIn(w http.ResponseWriter, r *http.Request) {
 	jwtBytes, err := claims.HMACSign(jwt.HS256, []byte(app.config.jwt.secret))
 	if err != nil {
 		app.errorJSON(w, errors.New("error signing"))
+		return
 	}
 	app.writeJSON(w, http.StatusOK, string(jwtBytes), "response")
 

@@ -9,7 +9,7 @@ import (
 
 func (app *application) wrap(next http.Handler) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		ctx := context.WithValue(r.Context(), "params", ps)
+		ctx := context.WithValue(r.Context(), httprouter.ParamsKey, ps)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	}
 }
@@ -26,9 +26,7 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodGet, "/v1/movies/:genre_id", app.getAllMoviesByGenre)
 	router.HandlerFunc(http.MethodGet, "/v1/genres", app.getAllGenres)
 
-	//router.HandlerFunc(http.MethodPost, "/v1/admin/editmovie", app.editmovie)
 	router.POST("/v1/admin/editmovie", app.wrap(secure.ThenFunc(app.editmovie)))
-	router.HandlerFunc(http.MethodGet, "/v1/admin/deletemovie/:id", app.deleteMovie)
-
+	router.GET("/v1/admin/deletemovie/:id", app.wrap(secure.ThenFunc(app.deleteMovie)))
 	return app.enableCORS(router)
 }

@@ -9,4 +9,7 @@ require (
 	golang.org/x/crypto v0.0.0-20210915214749-c084706c2272
 )
 
-require github.com/justinas/alice v1.2.0 // indirect
+require (
+	github.com/graphql-go/graphql v0.8.0 // indirect
+	github.com/justinas/alice v1.2.0 // indirect
+)

@@ -85,7 +85,7 @@ var movieType = graphql.NewObject(
 )
 
 func (app *application) moviesGraphQL(w http.ResponseWriter, r *http.Request) {
-	movies, err := app.Models.DB.All()
+	movies, err := app.models.DB.All()
 	if err!=nil{
 		log.Println(err)
 	}
@@ -120,5 +120,6 @@ func (app *application) moviesGraphQL(w http.ResponseWriter, r *http.Request) {
 	if err!=nil{
 		fmt.Println(err)
 	}
-	log.Println(movies)
+	log.Println(&movies)
+
 }

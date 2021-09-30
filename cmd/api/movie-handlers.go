@@ -27,7 +27,7 @@ func (app *application) getOneMovie(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	movie, err := app.Models.DB.Get(id)
+	movie, err := app.models.DB.Get(id)
 
 	err = app.writeJSON(w, http.StatusOK, movie, "movie")
 	if err != nil {
@@ -37,7 +37,7 @@ func (app *application) getOneMovie(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getAllMovies(w http.ResponseWriter, r *http.Request) {
-	movies, err := app.Models.DB.All()
+	movies, err := app.models.DB.All()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -52,7 +52,7 @@ func (app *application) getAllMovies(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getAllGenres(w http.ResponseWriter, r *http.Request) {
-	genres, err := app.Models.DB.GenresAll()
+	genres, err := app.models.DB.GenresAll()
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -74,7 +74,7 @@ func (app *application) getAllMoviesByGenre(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	movies, err := app.Models.DB.All(genreID)
+	movies, err := app.models.DB.All(genreID)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -112,7 +112,7 @@ func (app *application) editmovie(w http.ResponseWriter, r *http.Request) {
 
 	if payload.ID != "0" {
 		id, _ := strconv.Atoi(payload.ID)
-		m, _ := app.Models.DB.Get(id)
+		m, _ := app.models.DB.Get(id)
 		movie = *m
 		movie.UpdatedAt = time.Now()
 	}
@@ -129,13 +129,13 @@ func (app *application) editmovie(w http.ResponseWriter, r *http.Request) {
 	movie.UpdatedAt = time.Now()
 
 	if movie.Id == 0 {
-		err = app.Models.DB.InsertMovie(movie)
+		err = app.models.DB.InsertMovie(movie)
 		if err != nil {
 			app.errorJSON(w, err)
 			return
 		}
 	} else {
-		err = app.Models.DB.UpdateMovie(movie)
+		err = app.models.DB.UpdateMovie(movie)
 		if err != nil {
 			app.errorJSON(w, err)
 			return
@@ -160,7 +160,7 @@ func (app *application) deleteMovie(w http.ResponseWriter, r *http.Request) {
 		app.errorJSON(w, err)
 		return
 	}
-	err = app.Models.DB.DeleteMovie(id)
+	err = app.models.DB.DeleteMovie(id)
 	if err != nil {
 		app.errorJSON(w, err)
 	}

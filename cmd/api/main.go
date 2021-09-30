@@ -36,7 +36,7 @@ type config struct {
 type application struct {
 	config config
 	logger *log.Logger
-	Models models.Models
+	models models.Models
 }
 
 func main() {
@@ -60,7 +60,7 @@ func main() {
 	app := &application{
 		config: cfg,
 		logger: logger,
-		Models: models.NewModels(db),
+		models: models.NewModels(db),
 	}
 
 	srv := http.Server{
